@@ -4,3 +4,10 @@
 ### Added
 - Initial commit & creation of repository file structure
 
+## [0.0.2] - 07/12/2024
+### Added
+- Initiated apps for each component
+- Created models for each component
+- Created serializers for each component
+- Created admin account handling using Django authenticate library
+

@@ -8,21 +8,66 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 ## Project Directory
 
 ```
-├── manage.py
-├── requirements.txt
-├── .gitignore
-├── README.md
+├─ README.md
+├─ requirements.txt
 │
-├── /govtech_fasms/                     # Django configuration files
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   └── wsgi.py
+├─ manage.py
 │
-└── /app/
-    ├── __init__.py
-    └── apps.py
+├─ govtech_fasms/
+│  ├─ __init__.py
+│  ├─ asgi.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  ├─ wsgi.py
+│
+├─ accounts/
+│  ├─ __init__.py
+│  ├─ admin.py
+│  ├─ apps.py
+│  ├─ migrations/
+│  │  └─ __init__.py
+│  ├─ models.py
+│  ├─ serializers.py
+│  ├─ urls.py
+│  ├─ views.py
+│  ├─ tests.py
+│
+├─ applicants/
+│  ├─ __init__.py
+│  ├─ admin.py
+│  ├─ apps.py
+│  ├─ migrations/
+│  │  └─ __init__.py
+│  ├─ models.py
+│  ├─ serializers.py
+│  ├─ urls.py
+│  ├─ views.py
+│  ├─ tests.py
+│
+├─ schemes/
+│  ├─ __init__.py
+│  ├─ admin.py
+│  ├─ apps.py
+│  ├─ migrations/
+│  │  └─ __init__.py
+│  ├─ models.py
+│  ├─ serializers.py
+│  ├─ urls.py
+│  ├─ views.py
+│  ├─ tests.py
+│
+└─ applications/
+   ├─ __init__.py
+   ├─ admin.py
+   ├─ apps.py
+   ├─ migrations/
+   │  └─ __init__.py
+   ├─ models.py
+   ├─ serializers.py
+   ├─ urls.py
+   ├─ views.py
+   ├─ tests.py
+
 
 ```
 
