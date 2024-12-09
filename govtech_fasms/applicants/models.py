@@ -14,17 +14,6 @@ EMPLOYMENT_STATUS_CHOICES = [
     ('Unemployed', 'Unemployed'),
 ]
 
-RELATIONSHIP_CHOICES = [
-    ('Spouse', 'Spouse'),
-    ('Parent', 'Parent'),
-    ('Child', 'Child'),
-    ('Grandparent', 'Grandparent'),
-    ('Grandchild', 'Grandchild'),
-    ('Sibling', 'Sibling'),
-    ('Guardian', 'Guardian'),
-    ('Ward', 'Ward'),
-]
-
 SEX_CHOICES = [
     ('Male', 'Male'),
     ('Female', 'Female'),
@@ -38,6 +27,17 @@ EDUCATION_CHOICES = [
     ('not in education', 'not in education'),
 ]
 
+RELATIONSHIP_CHOICES = [
+    ('Spouse', 'Spouse'),
+    ('Parent', 'Parent'),
+    ('Child', 'Child'),
+    ('Grandparent', 'Grandparent'),
+    ('Grandchild', 'Grandchild'),
+    ('Sibling', 'Sibling'),
+    ('Guardian', 'Guardian'),
+    ('Ward', 'Ward'),
+]
+
 class Address(models.Model):
     postal_code = models.CharField(max_length=6, null=True, blank=True)
     unit_number = models.CharField(max_length=10, null=True, blank=True)
@@ -48,16 +48,17 @@ class Address(models.Model):
         return f"{self.address_line_1}, {self.address_line_2}, {self.unit_number}, {self.postal_code}"
 
 
-class Applicant(models.Model):
+class People(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    nric = models.CharField(max_length=20, unique=True)  # NRIC must be unique
     name = models.CharField(max_length=100, null=False)
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, null=True)
     date_of_birth = models.DateField(null=False)
     marital_status = models.CharField(choices=MARITAL_STATUS_CHOICES, max_length=8, null=False)
     employment_status = models.CharField(choices=EMPLOYMENT_STATUS_CHOICES, max_length=10, null=False)
     retrenchment_date = models.DateField(null=True, blank=True)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
-    contact_info = models.CharField(max_length=8, null=True, blank=True, unique=True)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)  # Adjusted to ForeignKey
+    contact_info = models.CharField(max_length=8, null=True, blank=True, unique=False)
     current_education = models.CharField(max_length=20, choices=EDUCATION_CHOICES, null=True, blank=True)
     monthly_income = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     completed_national_service = models.BooleanField(default=False)
@@ -70,16 +71,22 @@ class Applicant(models.Model):
         )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.nric})"
 
 
-class HouseholdRelationship(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="relationships_as_applicant")
-    related_person = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="relationships_as_related")
-    relationship_type = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES)
-
-    class Meta:
-        unique_together = ('applicant', 'related_person', 'relationship_type')
+class Applicant(models.Model):
+    applicant_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    person = models.OneToOneField(People, on_delete=models.CASCADE, related_name='applicant_profile')
 
     def __str__(self):
-        return f"{self.applicant.name} is {self.relationship_type} of {self.related_person.name}"
+        return f"Applicant {self.person.name} ({self.person.nric})"
+
+
+class HouseholdMember(models.Model):
+    householdmember_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='household_members')
+    person = models.ForeignKey(People, on_delete=models.CASCADE, related_name='household_member_profile')
+    relationship_to_applicant = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES)
+
+    def __str__(self):
+        return f"{self.person.name} is a {self.relationship_to_applicant} of {self.applicant.person.name}"

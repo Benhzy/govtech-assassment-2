@@ -13,5 +13,12 @@
 
 ## [0.0.3] - 09/12/2024
 ### Added
+- Created unary relationship between applicants for applicant-household member relationships
+### Updated
 - Updated accounts component to allow logout
-- Updated applicants component to create unary relationship between applicants for applicant-household member relationships
+
+## [0.0.4] - 09/12/2024
+### Added
+- Created people table for all individuals as a parent of applicants & household member 
+### Updated
+- Updated applicants component to replace unary relationship between applicants with a separate household member table to prevent household members being treated as applicants
