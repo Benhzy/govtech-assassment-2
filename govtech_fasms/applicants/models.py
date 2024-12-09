@@ -50,14 +50,14 @@ class Address(models.Model):
 
 class People(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    nric = models.CharField(max_length=20, unique=True)  # NRIC must be unique
+    nric = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100, null=False)
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, null=True)
     date_of_birth = models.DateField(null=False)
     marital_status = models.CharField(choices=MARITAL_STATUS_CHOICES, max_length=8, null=False)
     employment_status = models.CharField(choices=EMPLOYMENT_STATUS_CHOICES, max_length=10, null=False)
     retrenchment_date = models.DateField(null=True, blank=True)
-    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)  # Adjusted to ForeignKey
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
     contact_info = models.CharField(max_length=8, null=True, blank=True, unique=False)
     current_education = models.CharField(max_length=20, choices=EDUCATION_CHOICES, null=True, blank=True)
     monthly_income = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

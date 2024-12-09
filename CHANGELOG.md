@@ -22,3 +22,8 @@
 - Created people table for all individuals as a parent of applicants & household member 
 ### Updated
 - Updated applicants component to replace unary relationship between applicants with a separate household member table to prevent household members being treated as applicants
+
+## [0.0.5] - 10/12/2024
+### Added
+- Redefined handling of scheme fields to make validation easier
+- Created logic for schemes component to use criteria for validation with applicants detail
