@@ -1,12 +1,11 @@
-from django.urls import path
-from .views import (
-    ApplicantListCreateView, ApplicantDetailView,
-    HouseholdMemberListCreateView, HouseholdMemberDetailView
-)
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ApplicantViewSet
 
+router = DefaultRouter()
+router.register('', ApplicantViewSet, basename='applicant')
+
+# URL patterns
 urlpatterns = [
-    path('', ApplicantListCreateView.as_view(), name='applicant-list-create'),
-    path('<int:pk>/', ApplicantDetailView.as_view(), name='applicant-detail'),
-    path('household-members/', HouseholdMemberListCreateView.as_view(), name='household-member-list-create'),
-    path('household-members/<int:pk>/', HouseholdMemberDetailView.as_view(), name='household-member-detail'),
+    path('', include(router.urls)),
 ]
