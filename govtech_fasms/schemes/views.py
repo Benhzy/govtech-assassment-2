@@ -102,6 +102,9 @@ class SchemeViewSet(viewsets.ViewSet):
         elif ctype == 'marital_status':
             return person.marital_status == cvalue
 
+        elif ctype == 'sex':
+            return person.sex == cvalue
+             
         elif ctype == 'employment_status':
             return person.employment_status == cvalue
 
@@ -121,13 +124,32 @@ class SchemeViewSet(viewsets.ViewSet):
         elif ctype == 'completed_national_service':
             required = (cvalue.lower() == 'true')
             return person.completed_national_service == required
+        
+        elif ctype == 'disability':
+            required = (cvalue.lower() == 'true')
+            return person.disability == required
+        
+        elif ctype == 'household_member_relationship':
+            for member in applicant.household_members.all():
+                if member.relationship_to_applicant == 'Child':
+                    return True
+            return False
 
+        elif ctype == 'household_member_age':
+            print(person.age)
+            operator = cvalue[0]
+            threshold = int(cvalue[1:])
+            for member in applicant.household_members.all():
+                if member.relationship_to_applicant == 'Child':
+                    if operator == '>':
+                        return person.age > threshold
+                    elif operator == '<':
+                        return person.age < threshold
+            return False
+        
         elif ctype == 'household_member_education':
             for member in applicant.household_members.all():
-                if (
-                    member.relationship_to_applicant == 'Child'
-                    and member.person.current_education == cvalue
-                ):
+                if member.relationship_to_applicant == 'Child'and member.person.current_education == cvalue:
                     return True
             return False
 

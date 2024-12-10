@@ -27,3 +27,14 @@
 ### Added
 - Redefined handling of scheme fields to make validation easier
 - Created logic for schemes component to use criteria for validation with applicants detail
+
+## [0.0.6] - 10/12/2024
+### Added
+- Added more scheme criteria type to schemes module
+- Added many to many relationship for schemes and applications (i.e. 1 application can have multple schemes)
+- Added validation for applications
+### Updated
+- Modified models to ensure UUID is read properly by child tables
+- Modified views to include validation
+### Removed
+- Redundant endpoints for benefits and criteria

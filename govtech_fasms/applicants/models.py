@@ -1,5 +1,5 @@
-import uuid
 from django.db import models
+import uuid
 from django.utils import timezone
 
 MARITAL_STATUS_CHOICES = [
@@ -57,6 +57,7 @@ class People(models.Model):
     marital_status = models.CharField(choices=MARITAL_STATUS_CHOICES, max_length=8, null=False)
     employment_status = models.CharField(choices=EMPLOYMENT_STATUS_CHOICES, max_length=10, null=False)
     retrenchment_date = models.DateField(null=True, blank=True)
+    disability = models.BooleanField(default=False)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
     contact_info = models.CharField(max_length=8, null=True, blank=True, unique=False)
     current_education = models.CharField(max_length=20, choices=EDUCATION_CHOICES, null=True, blank=True)
