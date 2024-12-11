@@ -13,60 +13,61 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 │
 ├─ manage.py
 │
-├─ govtech_fasms/
-│  ├─ __init__.py
-│  ├─ asgi.py
-│  ├─ settings.py
-│  ├─ urls.py
-│  ├─ wsgi.py
-│
-├─ accounts/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-├─ applicants/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-├─ schemes/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-└─ applications/
-   ├─ __init__.py
-   ├─ admin.py
-   ├─ apps.py
-   ├─ migrations/
-   │  └─ __init__.py
-   ├─ models.py
-   ├─ serializers.py
-   ├─ urls.py
-   ├─ views.py
-   ├─ tests.py
+└─ govtech_fasms/
+   ├─ govtech_fasms/
+   │  ├─ __init__.py
+   │  ├─ asgi.py
+   │  ├─ settings.py
+   │  ├─ urls.py
+   │  ├─ wsgi.py
+   │
+   ├─ accounts/
+   │  ├─ __init__.py
+   │  ├─ admin.py
+   │  ├─ apps.py
+   │  ├─ migrations/
+   │  │  └─ __init__.py
+   │  ├─ models.py
+   │  ├─ serializers.py
+   │  ├─ urls.py
+   │  ├─ views.py
+   │  ├─ tests.py
+   │
+   ├─ applicants/
+   │  ├─ __init__.py
+   │  ├─ admin.py
+   │  ├─ apps.py
+   │  ├─ migrations/
+   │  │  └─ __init__.py
+   │  ├─ models.py
+   │  ├─ serializers.py
+   │  ├─ urls.py
+   │  ├─ views.py
+   │  ├─ tests.py
+   │
+   ├─ schemes/
+   │  ├─ __init__.py
+   │  ├─ admin.py
+   │  ├─ apps.py
+   │  ├─ migrations/
+   │  │  └─ __init__.py
+   │  ├─ models.py
+   │  ├─ serializers.py
+   │  ├─ urls.py
+   │  ├─ views.py
+   │  ├─ tests.py
+   │
+   └─ applications/
+      ├─ __init__.py
+      ├─ admin.py
+      ├─ apps.py
+      ├─ migrations/
+      │  └─ __init__.py
+      ├─ models.py
+      ├─ serializers.py
+      ├─ urls.py
+      ├─ views.py
+      ├─ tests.py
 
 
 ```
