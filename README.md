@@ -8,66 +8,21 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 ## Project Directory
 
 ```
-├─ README.md
-├─ requirements.txt
+├── manage.py
+├── requirements.txt
+├── .gitignore
+├── README.md
 │
-├─ manage.py
+├── /govtech_fasms/                     # Django configuration files
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
 │
-├─ govtech_fasms/
-│  ├─ __init__.py
-│  ├─ asgi.py
-│  ├─ settings.py
-│  ├─ urls.py
-│  ├─ wsgi.py
-│
-├─ accounts/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-├─ applicants/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-├─ schemes/
-│  ├─ __init__.py
-│  ├─ admin.py
-│  ├─ apps.py
-│  ├─ migrations/
-│  │  └─ __init__.py
-│  ├─ models.py
-│  ├─ serializers.py
-│  ├─ urls.py
-│  ├─ views.py
-│  ├─ tests.py
-│
-└─ applications/
-   ├─ __init__.py
-   ├─ admin.py
-   ├─ apps.py
-   ├─ migrations/
-   │  └─ __init__.py
-   ├─ models.py
-   ├─ serializers.py
-   ├─ urls.py
-   ├─ views.py
-   ├─ tests.py
-
+└── /app/
+    ├── __init__.py
+    └── apps.py
 
 ```
 
@@ -128,7 +83,6 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 4. **Setup Database:**
 
    Login to your PostgreSQL command-line interface using the following command:
-   
    ```bash
    psql -U <username> -h <host> -d <database_name>
    ```
@@ -138,40 +92,10 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    ```sql
    CREATE DATABASE fasms;
    ```
-   Update your `.env` file with the following database parameters:
+   Update your `.env` file with the following database credentials:
 
    ```env
-   DB_NAME=fasms
-   DB_USER=username
-   DB_PASSWORD=password
-   DB_HOST=localhost
-   DB_PORT=5432
+   DATABASE_URL=postgres://<username>:<password>@localhost:5432/fasms
    ```
    Replace `username` and `password` with your PostgreSQL credentials.
-   `DB_HOST` and `DB_PORT` should be updated for production environment.
 
-   Migrate models into Postgres database using the following commands:
-
-   ```bash
-   cd .\govtech_fasms\
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-
-5. **Run Development Mode**
-
-   Run the following command to start the Django development server:
-
-   ```bash
-   python manage.py runserver localhost:5000
-   ```
-
-6. **Administrator Management**
-
-   Run the following command to create an administrator user:
-
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-   
