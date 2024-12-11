@@ -6,7 +6,7 @@ from .models import Applicant, Address, HouseholdMember, People
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['postal_code', 'unit_number', 'address_line_1', 'address_line_2']
+        fields = ['address_id', 'postal_code', 'unit_number', 'address_line_1', 'address_line_2']
 
 
 class HouseholdMemberSerializer(serializers.Serializer):
@@ -146,3 +146,40 @@ class ApplicantSerializer(serializers.Serializer):
                 for hm in instance.household_members.all()
             ]
         }
+
+    def update(self, instance, validated_data):
+        household_members_data = validated_data.pop('household_members', [])
+
+        person_data = validated_data
+        address_data = person_data.pop('address', None)
+
+        if address_data:
+            if instance.person.address:
+                for key, value in address_data.items():
+                    setattr(instance.person.address, key, value)
+                instance.person.address.save()
+            else:
+                instance.person.address = Address.objects.create(**address_data)
+        
+        for key, value in person_data.items():
+            setattr(instance.person, key, value)
+        instance.person.save()
+
+        existing_hm_ids = {str(hm.householdmember_id) for hm in instance.household_members.all()}
+        new_hm_ids = {hm_data.get('householdmember_id') for hm_data in household_members_data if hm_data.get('householdmember_id')}
+
+        for hm in instance.household_members.all():
+            if str(hm.householdmember_id) not in new_hm_ids:
+                hm.delete()
+
+        for hm_data in household_members_data:
+            if 'householdmember_id' in hm_data and hm_data['householdmember_id'] in existing_hm_ids:
+                hm_instance = instance.household_members.get(householdmember_id=hm_data['householdmember_id'])
+                HouseholdMemberSerializer().update(hm_instance, hm_data)
+            else:
+                hm_serializer = HouseholdMemberSerializer(data=hm_data)
+                hm_serializer.is_valid(raise_exception=True)
+                hm_serializer.create(instance, hm_serializer.validated_data)
+
+        instance.save()
+        return instance

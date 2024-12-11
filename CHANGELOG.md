@@ -38,3 +38,10 @@
 - Modified views to include validation
 ### Removed
 - Redundant endpoints for benefits and criteria
+
+## [0.1.0] - 11/12/2024
+### Updated
+- Modified relations for better efficiency & better represent use case
+- Modified fields for to better represent use case
+### Removed
+- Removed applications_eligibilitycriteria table and merge with applications_applicationscheme table

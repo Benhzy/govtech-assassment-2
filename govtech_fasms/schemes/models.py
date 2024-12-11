@@ -23,7 +23,6 @@ class Benefit(models.Model):
     scheme = models.ForeignKey(Scheme, related_name='benefits', on_delete=models.CASCADE)
     benefit_type = models.CharField(max_length=50, null=False)
     description = models.TextField(null=True, blank=True)
-    conditions = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.benefit_type} for {self.scheme}"

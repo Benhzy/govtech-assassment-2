@@ -1,10 +1,12 @@
 from django.db import transaction
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .models import Application, ApplicationScheme, ApplicationEligibility, ApplicationBenefit
+from rest_framework.exceptions import ValidationError
+from .models import Application, ApplicationScheme, ApplicationBenefit
 from .serializers import ApplicationSerializer
-from schemes.models import Scheme, EligibilityCriteria, Benefit
+from schemes.models import Scheme 
 from applicants.models import Applicant
+
 
 class ApplicationListCreateView(generics.ListCreateAPIView):
     queryset = Application.objects.all()
@@ -45,23 +47,21 @@ class ApplicationListCreateView(generics.ListCreateAPIView):
                     remarks=data.get('remarks', ''),
                 )
 
-                for scheme in valid_schemes:
-                    ApplicationScheme.objects.create(application=application, scheme=scheme)
-
-                    for criterion in scheme.eligibility_criteria.all():
-                        ApplicationEligibility.objects.create(
-                            application=application,
-                            eligibility_criterion=criterion,
-                            is_met=self.meets_criterion(applicant, criterion)
-                        )
-
+                for scheme in valid_schemes:             
+                    application_scheme = ApplicationScheme.objects.create(
+                        application=application,
+                        scheme=scheme,
+                    )
+                    application_scheme.evaluate_eligibility(applicant)
+                    
                     for benefit in scheme.benefits.all():
                         ApplicationBenefit.objects.create(
-                            application=application,
+                            application_scheme=application_scheme,
                             benefit=benefit,
-                            awarded=False,  # Default logic, can be updated later
+                            awarded=False,
                             notes=""
                         )
+
         except Exception as e:
             return Response(
                 {"error": f"An unexpected error occurred: {str(e)}"},
@@ -72,79 +72,33 @@ class ApplicationListCreateView(generics.ListCreateAPIView):
             self.get_serializer(application).data,
             status=status.HTTP_201_CREATED
         )
+    
+class ApplicationListApplicantView(generics.ListAPIView):
+    serializer_class = ApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-    def meets_criterion(self, applicant, criterion):
-        ctype = criterion.criterion_type
-        cvalue = criterion.criterion_value
-        person = applicant.person
-
-        if ctype == 'age':
-            operator = cvalue[0]
-            threshold = int(cvalue[1:])
-            if operator == '>':
-                return person.age > threshold
-            elif operator == '<':
-                return person.age < threshold
-            return False
-
-        elif ctype == 'marital_status':
-            return person.marital_status == cvalue
-
-        elif ctype == 'sex':
-            return person.sex == cvalue
-
-        elif ctype == 'employment_status':
-            return person.employment_status == cvalue
-
-        elif ctype == 'current_education':
-            return person.current_education == cvalue
-
-        elif ctype == 'monthly_income':
-            operator = cvalue[0]
-            threshold = float(cvalue[1:])
-            applicant_income = person.monthly_income if person.monthly_income is not None else 0.0
-            if operator == '>':
-                return applicant_income > threshold
-            elif operator == '<':
-                return applicant_income < threshold
-            return False
-
-        elif ctype == 'completed_national_service':
-            required = (cvalue.lower() == 'true')
-            return person.completed_national_service == required
-
-        elif ctype == 'disability':
-            required = (cvalue.lower() == 'true')
-            return person.disability == required
-
-        elif ctype == 'household_member_relationship':
-            for member in applicant.household_members.all():
-                if member.relationship_to_applicant == 'Child':
-                    return True
-            return False
-
-        elif ctype == 'household_member_age':
-            operator = cvalue[0]
-            threshold = int(cvalue[1:])
-            for member in applicant.household_members.all():
-                if member.relationship_to_applicant == 'Child':
-                    if operator == '>':
-                        return person.age > threshold
-                    elif operator == '<':
-                        return person.age < threshold
-            return False
-
-        elif ctype == 'household_member_education':
-            for member in applicant.household_members.all():
-                if member.relationship_to_applicant == 'Child' and member.person.current_education == cvalue:
-                    return True
-            return False
-
-        else:
-            raise ValueError(f"Unknown criterion type: '{ctype}' is not in the system.")
-
-
-class ApplicationDetailView(generics.RetrieveAPIView):
+    def get_queryset(self):
+        applicant_id = self.kwargs.get('applicant_id')
+        if not applicant_id:
+            raise ValidationError({"error": "Applicant ID is required."})
+        return Application.objects.filter(applicant__applicant_id=applicant_id)
+    
+class ApplicationUpdateView(generics.UpdateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data
+
+        allowed_fields = ['application_status', 'remarks', 'decision_date']
+        for field in allowed_fields:
+            if field in data:
+                setattr(instance, field, data[field])
+
+        instance.save()
+        return Response(
+            self.get_serializer(instance).data,
+            status=status.HTTP_200_OK
+        )

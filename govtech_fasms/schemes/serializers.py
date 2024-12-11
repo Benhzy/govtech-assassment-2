@@ -9,7 +9,7 @@ class EligibilityCriteriaSerializer(serializers.ModelSerializer):
 class BenefitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Benefit
-        fields = ['benefit_id', 'benefit_type', 'description', 'conditions']
+        fields = ['benefit_id', 'benefit_type', 'description']
 
 class SchemeSerializer(serializers.ModelSerializer):
     eligibility_criteria = EligibilityCriteriaSerializer(many=True, read_only=True)

@@ -158,15 +158,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    python manage.py migrate
    ```
 
-5. **Run Development Mode**
-
-   Run the following command to start the Django development server:
-
-   ```bash
-   python manage.py runserver localhost:5000
-   ```
-
-6. **Administrator Management**
+5. **Administrator Management**
 
    Run the following command to create an administrator user:
 
@@ -174,4 +166,22 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    python manage.py createsuperuser
    ```
 
-   
+6. **Run Development Mode**
+
+   Run the following command to start the Django development server:
+
+   ```bash
+   python manage.py runserver localhost:5000
+   ```
+
+7. **Authentication**
+
+   Login using the administrator username and password via the `/api/admin/login/` POST request endpoint.
+
+   Save the generated token as the request header for future requests in the following format:
+
+   ```json
+   Authorization: Token {generated_token}
+   ```
+
+   To revoke the authentication token, use the `/api/admin/logout/` POST request endpoint. 

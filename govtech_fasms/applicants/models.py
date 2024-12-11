@@ -39,9 +39,10 @@ RELATIONSHIP_CHOICES = [
 ]
 
 class Address(models.Model):
-    postal_code = models.CharField(max_length=6, null=True, blank=True)
-    unit_number = models.CharField(max_length=10, null=True, blank=True)
-    address_line_1 = models.CharField(max_length=100, null=True, blank=True)
+    address_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    postal_code = models.CharField(max_length=6, null=False)
+    unit_number = models.CharField(max_length=10, null=False)
+    address_line_1 = models.CharField(max_length=100, null=False)
     address_line_2 = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
@@ -49,8 +50,8 @@ class Address(models.Model):
 
 
 class People(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    nric = models.CharField(max_length=20, unique=True)
+    people_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    nric = models.CharField(max_length=9, unique=True, null=False, blank=False)
     name = models.CharField(max_length=100, null=False)
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, null=True)
     date_of_birth = models.DateField(null=False)
@@ -59,7 +60,7 @@ class People(models.Model):
     retrenchment_date = models.DateField(null=True, blank=True)
     disability = models.BooleanField(default=False)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    contact_info = models.CharField(max_length=8, null=True, blank=True, unique=False)
+    contact_info = models.CharField(max_length=8, null=True, blank=True, unique=True)
     current_education = models.CharField(max_length=20, choices=EDUCATION_CHOICES, null=True, blank=True)
     monthly_income = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     completed_national_service = models.BooleanField(default=False)
