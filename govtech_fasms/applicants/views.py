@@ -54,7 +54,6 @@ class ApplicantViewSet(viewsets.ModelViewSet):
 
     def handle_household_members(self, applicant, household_members_data):
         try:
-            # First, clear existing household members if updating
             HouseholdMember.objects.filter(applicant=applicant).delete()
             
             for hm_data in household_members_data:
