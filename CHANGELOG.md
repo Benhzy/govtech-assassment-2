@@ -45,3 +45,7 @@
 - Modified fields for to better represent use case
 ### Removed
 - Removed applications_eligibilitycriteria table and merge with applications_applicationscheme table
+
+## [0.1.1] - 12/12/2024
+### Updated
+- Added better error handling & make sure code conforms to DRF

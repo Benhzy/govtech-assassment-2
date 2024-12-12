@@ -39,7 +39,7 @@ RELATIONSHIP_CHOICES = [
 ]
 
 class Address(models.Model):
-    address_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    address_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     postal_code = models.CharField(max_length=6, null=False)
     unit_number = models.CharField(max_length=10, null=False)
     address_line_1 = models.CharField(max_length=100, null=False)
@@ -50,7 +50,7 @@ class Address(models.Model):
 
 
 class People(models.Model):
-    people_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    people_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nric = models.CharField(max_length=9, unique=True, null=False, blank=False)
     name = models.CharField(max_length=100, null=False)
     sex = models.CharField(max_length=6, choices=SEX_CHOICES, null=True)
@@ -77,7 +77,7 @@ class People(models.Model):
 
 
 class Applicant(models.Model):
-    applicant_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    applicant_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     person = models.OneToOneField(People, on_delete=models.CASCADE, related_name='applicant_profile')
 
     def __str__(self):
@@ -85,7 +85,7 @@ class Applicant(models.Model):
 
 
 class HouseholdMember(models.Model):
-    householdmember_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    householdmember_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='household_members')
     person = models.ForeignKey(People, on_delete=models.CASCADE, related_name='household_member_profile')
     relationship_to_applicant = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES)

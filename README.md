@@ -161,6 +161,8 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 
 5. **Administrator Management**
 
+   This project uses Django's [authentication system](https://docs.djangoproject.com/en/5.1/topics/auth/default/) in its default configuration.
+
    Run the following command to create an administrator user:
 
    ```bash

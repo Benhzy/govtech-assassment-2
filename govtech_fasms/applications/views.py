@@ -1,19 +1,20 @@
-from django.db import transaction
-from rest_framework import generics, permissions, status
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from django.db import transaction
+
 from .models import Application, ApplicationScheme, ApplicationBenefit
 from .serializers import ApplicationSerializer
-from schemes.models import Scheme 
+from schemes.models import Scheme
 from applicants.models import Applicant
 
-
-class ApplicationListCreateView(generics.ListCreateAPIView):
+class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         data = request.data
         applicant_id = data.get('applicant_id')
         schemes = data.get('schemes', [])
@@ -72,21 +73,6 @@ class ApplicationListCreateView(generics.ListCreateAPIView):
             self.get_serializer(application).data,
             status=status.HTTP_201_CREATED
         )
-    
-class ApplicationListApplicantView(generics.ListAPIView):
-    serializer_class = ApplicationSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        applicant_id = self.kwargs.get('applicant_id')
-        if not applicant_id:
-            raise ValidationError({"error": "Applicant ID is required."})
-        return Application.objects.filter(applicant__applicant_id=applicant_id)
-    
-class ApplicationUpdateView(generics.UpdateAPIView):
-    queryset = Application.objects.all()
-    serializer_class = ApplicationSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -102,3 +88,27 @@ class ApplicationUpdateView(generics.UpdateAPIView):
             self.get_serializer(instance).data,
             status=status.HTTP_200_OK
         )
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.application_status != 'Pending':
+            return Response(
+                {"error": "Only pending applications can be deleted."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        instance.delete()
+        return Response(
+            {"message": "Application successfully deleted."},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+    @action(detail=False, url_path='applicant', methods=['get'])
+    def by_applicant(self, request):
+        applicant_id = request.query_params.get('applicant')
+        if not applicant_id:
+            raise ValidationError({"error": "Applicant ID is required."})
+            
+        queryset = self.get_queryset().filter(applicant__applicant_id=applicant_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
