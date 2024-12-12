@@ -163,7 +163,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 
    This project uses Django's [authentication system](https://docs.djangoproject.com/en/5.1/topics/auth/default/) in its default configuration.
 
-   Run the following command to create an administrator user:
+   Run the following command to create a superuser with all permissions:
 
    ```bash
    python manage.py createsuperuser
@@ -179,6 +179,8 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
 
 7. **Authentication**
 
+   Register as an administrator via the `/api/admin/register/` POST request endpoint.
+   
    Login using the administrator username and password via the `/api/admin/login/` POST request endpoint.
 
    Save the generated token as the request header for future requests in the following format:
