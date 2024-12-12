@@ -49,3 +49,5 @@
 ## [0.1.1] - 12/12/2024
 ### Updated
 - Added better error handling & make sure code conforms to DRF
+- Added registration for administrator 
+- Added update delete to schemes
