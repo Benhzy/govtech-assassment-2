@@ -20,6 +20,8 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    │  ├─ settings.py
    │  ├─ urls.py
    │  ├─ wsgi.py
+   │  └─ utils
+   │     └─ eligibility.py
    │
    ├─ accounts/
    │  ├─ __init__.py
@@ -31,7 +33,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    │  ├─ serializers.py
    │  ├─ urls.py
    │  ├─ views.py
-   │  ├─ tests.py
+   │  └─ tests.py
    │
    ├─ applicants/
    │  ├─ __init__.py
@@ -43,7 +45,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    │  ├─ serializers.py
    │  ├─ urls.py
    │  ├─ views.py
-   │  ├─ tests.py
+   │  └─ tests.py
    │
    ├─ schemes/
    │  ├─ __init__.py
@@ -55,7 +57,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
    │  ├─ serializers.py
    │  ├─ urls.py
    │  ├─ views.py
-   │  ├─ tests.py
+   │  └─ tests.py
    │
    └─ applications/
       ├─ __init__.py
@@ -67,8 +69,7 @@ The FASMS is a backend system designed to manage financial assistance schemes fo
       ├─ serializers.py
       ├─ urls.py
       ├─ views.py
-      ├─ tests.py
-
+      └─ tests.py
 
 ```
 
